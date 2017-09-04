@@ -7,7 +7,7 @@ var counter;
 request.onreadystatechange = function() {
 	if (this.readyState == 4 && this.status == 200) {
 		data = JSON.parse(this.responseText);
-		//console.log(data);
+		console.log(data);
 		//console.log("data full");
 		//console.log(data["feed"]["entry"][0]["content"]["$t"])
 		counter = Math.abs(data["feed"]["entry"].length);
