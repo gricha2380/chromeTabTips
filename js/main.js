@@ -2,14 +2,16 @@
 var request = new XMLHttpRequest();
 var url = "https://spreadsheets.google.com/feeds/list/1WzbZVa56lPn3Cqrtqn6SEU5RJ3dSIIhLcXGupj2bBqg/default/public/values?alt=json";
 var data = '';
-console.log("lets do this...")
+var counter;
 
 request.onreadystatechange = function() {
 	if (this.readyState == 4 && this.status == 200) {
 		data = JSON.parse(this.responseText);
-		console.log(data);
-		console.log("data full");
-		console.log(data["feed"]["entry"][0]["content"]["$t"])
+		//console.log(data);
+		//console.log("data full");
+		//console.log(data["feed"]["entry"][0]["content"]["$t"])
+		counter = Math.abs(data["feed"]["entry"].length);
+		console.log("this is counter in AJAX "+counter);
 		showTip();
     }
 }
@@ -50,39 +52,45 @@ function generateNumber(num) {
 
 function showTip() {
 	// Tip Limit counter
-var counter = data["feed"]["entry"];
-//counter = counter.length;
-console.log("counter")
-console.log(counter.length);
-var currentTip;
-reduceTip(counter.length);
 
-	if (counter.length>1) {
-		currentTip = generateNumber(counter.length-1);
-		reduceTip(counter.length);
-		console.log("hello. counter specific");
-		console.log(counter[0]["content"]["$t"]);
-		document.getElementsByClassName("js-tip")[0].innerHTML = counter[currentTip]["content"]["$t"];
-	} else if (counter.length==1) {
-		currentTip = generateNumber(counter.length-1);
-		reduceTip(counter.length);
-		document.getElementsByClassName("js-tip")[0].innerHTML = tipsList[currentTip];
+	var list = data["feed"]["entry"];
+//counter = counter.length;
+console.log("counter starter value")
+console.log(counter);
+var currentTip;
+//reduceTip(counter);
+
+	if (counter>1) {
+		currentTip = generateNumber(counter-1);
+		console.log("current tip is "+currentTip);
+		reduceTip();
+		console.log("Reducing counter now, sir. It's: "+counter);
+		//console.log(list[0]["content"]["$t"]);
+		document.getElementsByClassName("js-tip")[0].innerHTML = "<div class='title'>"+list[currentTip]["gsx$category"]["$t"] + "</div>"+ list[currentTip]["content"]["$t"];
+	} else if (counter==1) {
+		currentTip = generateNumber(counter-1);
+		reduceTip();
+		document.getElementsByClassName("js-tip")[0].innerHTML = list[currentTip]["content"]["$t"];
 		document.getElementsByClassName("tip-button")[0].classList.add("disabled");
 	}
 	else {
 		// reduceTip();
-		document.getElementsByClassName("js-tip")[0].innerHTML = tipsList[currentTip];
+		document.getElementsByClassName("js-tip")[0].innerHTML = list[currentTip]["content"]["$t"];
 		document.getElementsByClassName("tip-button")[0].classList.add("disabled");
 	}
 
 }
 //showTip();
 
-function reduceTip(counterLocal) {
-	console.log("content of reduceTip",counterLocal);
-	counterLocal-1;
-	console.log("content of reduceTip after minus",counterLocal);
-	document.getElementsByClassName("tip-limit-count")[0].innerText = counterLocal;
+function reduceTip() {
+	//var countPlain = Math.abs(counterLocal);
+	console.log("content of reduceTip",counter);
+	//counterLocal--;
+	counter--;
+	console.log("content of reduceTip after minus",counter);
+	document.getElementsByClassName("tip-limit-count")[0].innerText = counter;
+	console.log("final reduceTip value "+counter)
+	//return counter = counterLocal;
 }
 
 document.getElementsByClassName("tip-button")[0].addEventListener("click", function(){

@@ -71,3 +71,11 @@ body {
   color: #888;
   cursor: not-allowed !important;
 }
+
+.title {
+  color: #336180;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-weight: bolder;
+  font-size: 1rem;
+}
